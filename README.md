@@ -2,30 +2,82 @@
 
 This repository contains a Dockerfile for creating a JavaScript dev environment anywhere (macOS, Linux, Windows) with Docker. It includes Git, Oh My Zsh, NodeJS, Yarn, NPM, Cordova, Ionic, Android SDK, Java JDK, Gradle and Firebase CLI Tools.
 
-### Prerequisites
+## Table of contents
 
-#### Docker latest (https://www.docker.com/get-docker)
+   1. [Prerequisites](#prerequisites)
+   2. [Usage](#usage)
+   3. [Shortcuts](#shortcuts)
+   4. [Create and publish a new version](#create-and-publish-a-new-version)
+   5. [Release notes](#release-notes)
 
-This will be used to create our container.
+## Prerequisites
 
-### Usage
+### Docker latest (https://www.docker.com/get-docker)
 
-* Go inside your working directory:
+This will be used to create and run our container.
+
+## Usage
+
+* Removing existing container:
 ```
-cd ./my-working-directory
+docker container rm -f javascript-dev-env
 ```
+
+This command will remove the javascript-dev-env container from your machine. This is needed before recreating it because a container must have a unique name.
 
 * Create and start your container:
+
+(Replace "/path/to/projects" to the actual absolute path where your projects are located. This container must be init with your projects folder path since it can be used by multiple projects and because you may need several terminal instance within it.)
+
 ```
-docker run --rm -it -v $(pwd):/data --workdir /data -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:latest /bin/zsh
+docker run --restart always --name javascript-dev-env -d -v "/path/to/projects:/projects:cached" --workdir /projects -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:latest
 ```
 
-You can also pick a specific tag (see [Release notes](#release-notes) for all available tags):
+You can also pick a specific tag, for example "romainfallet/javascript-dev-env:2018-04-23" instead of "romainfallet/javascript-dev-env:latest" (see [Release notes](#release-notes) for all available tags).
+
+This command will create and start the javascript-dev-env container in background so that you can attach multiple terminal instance in it.
+
+The container will live forever until you remove or stop it. It will start automatically again each time the Docker app boots up.
+
+* Start a new terminal session:
+
+Go in the project you want to use into the container:
 ```
-docker run --rm -it -v $(pwd):/data --workdir /data -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:2018-04-23 /bin/zsh
+cd /path/to/projects/project
 ```
 
-This will mount your current directory into the JavaScript dev environment container (in the "data" directory) and provide you a Z-shell so that you can use Git, Node, Yarn, NPM, Ionic and Cordova in your project without worrying about installing anything.
+Then, use:
+```
+docker exec -it javascript-dev-env bash -c "cd ${PWD##*/} && /bin/zsh"
+```
+
+This will start a Z-shell from your current directory into the javascript-dev-env container so that you can use Git, Node, Yarn, NPM, Ionic, Cordova and Firebase in your project without worrying about installing anything.
+
+## Shortcuts
+
+Because these commands are very verbose and are not easily usable daily, you can set the aliases below.
+
+```
+alias startdevenv='docker container rm -f javascript-dev-env && docker run --restart always --name javascript-dev-env -d -i -v "/Users/romainfallet/Projets:/projects:cached" --workdir /projects -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:latest'
+```
+```
+alias devterminal='docker exec -it javascript-dev-env bash -c "cd ${PWD##*/} && /bin/zsh"'
+```
+
+Restart your terminal then, you can run:
+```
+startdevenv
+```
+To remove and recreate the container (it can be needed sometimes if it becomes buggy or uses too much CPU).
+
+and
+
+```
+devterminal
+```
+
+Inside a project directory to start a new terminal.
+
 
 ## Create and publish a new version
 
