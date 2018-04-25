@@ -58,7 +58,7 @@ This will start a Z-shell from your current directory into the javascript-dev-en
 Because these commands are very verbose and are not easily usable daily, you can set the aliases below.
 
 ```
-alias startdevenv='docker container rm -f javascript-dev-env && docker run --restart always --name javascript-dev-env -d -i -v "/Users/romainfallet/Projets:/projects:cached" --workdir /projects -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:latest'
+alias startdevenv='docker container rm -f javascript-dev-env && docker run --restart always --name javascript-dev-env -d -i -v "/path/to/projects:/projects:cached" --workdir /projects -p 8100:8100 -p 3000:3000 romainfallet/javascript-dev-env:latest'
 ```
 ```
 alias devterminal='docker exec -it javascript-dev-env bash -c "cd ${PWD##*/} && /bin/zsh"'
