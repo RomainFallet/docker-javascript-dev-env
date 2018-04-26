@@ -24,7 +24,10 @@ curl -L https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.gz | tar xz -
 # without creating the folder "yarn-v1.6.0" by stripping one folder level (--strip=1)
 curl -L https://github.com/yarnpkg/yarn/releases/download/v1.6.0/yarn-v1.6.0.tar.gz | tar xz -C /usr/local/ --strip=1  && \
 # Install Ionic Cordova & Firebase CLI Tools
-npm install -g ionic@3.20.0 cordova@8.0.0 firebase-tools@3.18.4
+npm install -g ionic@3.20.0 cordova@8.0.0 firebase-tools@3.18.4 && \
+# Install Heroku CLI
+curl https://cli-assets.heroku.com/install-standalone.sh | sh
+
 
 # Install Gradle
 RUN curl -Ls https://services.gradle.org/distributions/gradle-4.6-bin.zip > gradle-4.6-bin.zip && \
